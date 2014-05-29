@@ -1,4 +1,4 @@
 OAuthConsole
 ============
 
-A tool to test and debug OAuth2 services.
+Tool for testing and debugging OAuth2 services.

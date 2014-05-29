@@ -1,0 +1,13 @@
+Bin
+bin
+obj
+TestResults
+TestDeploy
+.DS_Store
+Thumbs.db
+*.dbmdl
+*.suo
+*.user
+~$*
+
+*.manifest
