@@ -55,6 +55,108 @@ namespace OAuthConsole
             ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(DefaultPageAddress);
         }
 
+        private void LoadJsonInTree(string jsonString)
+        {
+            jsonTree.Nodes.Clear();
+
+            var rootNode = new TreeNode("JSON");
+            jsonTree.Nodes.Add(rootNode);
+
+            if (!string.IsNullOrWhiteSpace(jsonString))
+            {
+                JObject myObject = null;
+
+                try
+                {
+                    myObject = JObject.Parse(jsonString);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+                if (myObject != null)
+                {
+                    LoadObjectInTree(rootNode, myObject);
+                }
+            }
+        }
+
+        private void LoadObjectInTree(TreeNode parentNode, JObject sourceObject)
+        {
+            foreach (var property in sourceObject.Properties())
+            {
+                if (property.Value is JValue)
+                {
+                    JValue jValue = (JValue)property.Value;
+
+                    string value = "";
+
+                    if (jValue.Type == JTokenType.Null)
+                    {
+                        value = "null";
+                    }
+                    else
+                    {
+                        value = jValue.Value.ToString();
+                    }
+
+                    TreeNode node = new TreeNode(property.Name + " : " + value);
+                    node.Tag = value;
+                    node.ContextMenuStrip = cMenuJsonTree;
+
+                    parentNode.Nodes.Add(node);
+                }
+                else if (property.Value is JArray)
+                {
+                    TreeNode arrayNode = new TreeNode("[ ] " + property.Name);
+                    parentNode.Nodes.Add(arrayNode);
+
+                    JArray array = (JArray)property.Value;
+                    LoadArrayInTree(arrayNode, array);
+                }
+                else if (property.Value is JObject)
+                {
+                    TreeNode objectNode = new TreeNode("{ } " + property.Name);
+                    parentNode.Nodes.Add(objectNode);
+
+                    LoadObjectInTree(objectNode, (JObject)property.Value);
+                }
+            }
+        }
+
+        private void LoadArrayInTree(TreeNode parentNode, JArray sourceObject)
+        {
+            for (int i = 0; i < sourceObject.Count; ++i)
+            {
+                JToken token = sourceObject[i];
+
+                if (token is JValue)
+                {
+                    JValue jValue = (JValue)token;
+
+                    TreeNode node = new TreeNode(jValue.Value.ToString());
+                    parentNode.Nodes.Add(node);
+                }
+                else if (token is JArray)
+                {
+                    TreeNode arrayNode = new TreeNode("[ ] " + i);
+                    parentNode.Nodes.Add(arrayNode);
+
+                    JArray array = (JArray)token;
+                    LoadArrayInTree(arrayNode, array);
+                }
+                else if (token is JObject)
+                {
+                    TreeNode objectNode = new TreeNode("{ } " + i);
+                    parentNode.Nodes.Add(objectNode);
+
+                    LoadObjectInTree(objectNode, (JObject)token);
+                }
+            }
+        }
+
+
         void wbMain_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             pbLoading.MarqueeAnimationSpeed = 0;
@@ -75,7 +177,7 @@ namespace OAuthConsole
                     Uri redirectUri = new Uri(redirectURIParameter);
 
                     if (e.Uri.Host == redirectUri.Host && e.Uri.LocalPath == redirectUri.LocalPath && e.Uri.Scheme == "x-cez")
-                    {                        
+                    {
                         tbMain.SelectedTab = tbMain.TabPages[0];
 
                         InvokeResultItem item = new InvokeResultItem();
@@ -110,9 +212,9 @@ namespace OAuthConsole
         void wbMain_Navigated(object sender, System.Windows.Navigation.NavigationEventArgs e)
         {
             Cursor.Current = Cursors.Default;
-          
+
             txtAddressBar.Text = e.Uri.ToString();
-            
+
             try
             {
                 string redirectURIParameter = GetCurrentRedirectUriParameter();
@@ -122,7 +224,7 @@ namespace OAuthConsole
                     Uri redirectUri = new Uri(redirectURIParameter);
 
                     if (e.Uri.Host == redirectUri.Host && e.Uri.LocalPath == redirectUri.LocalPath)
-                    {                        
+                    {
                         tbMain.SelectedTab = tbMain.TabPages[0];
 
                         InvokeResultItem item = new InvokeResultItem();
@@ -265,7 +367,7 @@ namespace OAuthConsole
                         if (action.Endpoint == "Token")
                         {
                             item.ExpectedContent = InvokeResultExpectedContent.TokenInBody;
-                        }                        
+                        }
                     }
 
                     _invokeResults.Insert(0, item);
@@ -281,7 +383,7 @@ namespace OAuthConsole
             OAuth2ProviderConfigurationElement configurationElement = _providersConfigurationSection.OAuth2Providers[providerName];
             txtAuthEndpoint.Text = configurationElement.AuthorizationEndpoint;
             txtTokenEndpoint.Text = configurationElement.TokenEndpoint;
-            
+
             // Loading clients.
             List<OAuth2ClientConfigurationElement> clients = new List<OAuth2ClientConfigurationElement>();
             foreach (OAuth2ClientConfigurationElement element in configurationElement.OAuth2Clients)
@@ -295,10 +397,14 @@ namespace OAuthConsole
             {
                 cbxClients.SelectedIndex = 0;
             }
-            
+
             _selectedProvider = configurationElement;
 
-            cbxActions.SelectedIndex = 0;
+            if (cbxActions.Items.Count > 0)
+            {
+                cbxActions.SelectedIndex = 0;
+            }
+
             txtInvokedEndpoint.Text = "";
         }
 
@@ -413,7 +519,7 @@ namespace OAuthConsole
                 }
 
                 if (Uri.IsWellFormedUriString(location, UriKind.Absolute) || location == "about:blank")
-                {                    
+                {
                     ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(location);
                 }
                 else
@@ -491,7 +597,7 @@ namespace OAuthConsole
                 MessageBox.Show("Header copied to clipboard", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
-        
+
         private void cMenuBtnCopyAuthCode_Click(object sender, EventArgs e)
         {
             if (dgInvokeResults.SelectedRows != null && dgInvokeResults.SelectedRows.Count > 0)
@@ -729,7 +835,7 @@ namespace OAuthConsole
                 {
                     byte[] buffer = Encoding.UTF8.GetBytes(text);
                     string decodedText = Convert.ToBase64String(buffer);
-                    
+
                     txtBase64Output.Text = decodedText;
                 }
                 catch (Exception ex)
@@ -750,13 +856,13 @@ namespace OAuthConsole
                     byte[] buffer = Convert.FromBase64String(text);
                     string decodedText = Encoding.UTF8.GetString(buffer);
 
-                    txtBase64Input.Text = decodedText;                    
+                    txtBase64Input.Text = decodedText;
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }            
+            }
         }
 
         private void btnCopyBase64_Click(object sender, EventArgs e)
@@ -765,6 +871,60 @@ namespace OAuthConsole
             {
                 Clipboard.SetText(txtBase64Output.Text);
                 MessageBox.Show("Base64 string copied to clipboard", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void tabJSONViewer_Selected(object sender, TabControlEventArgs e)
+        {
+            if (e.TabPageIndex == 0)
+            {
+                this.LoadJsonInTree(txtJsonString.Text);                
+            }
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtJsonString.Text = "";
+        }
+
+        private void btnCopyTreeText_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtJsonString.Text))
+            {
+                Clipboard.SetText(txtJsonString.Text);
+            }
+        }
+
+        private void btnPasteTreeText_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.ContainsText())
+            {
+                txtJsonString.Text = Clipboard.GetText();
+            }
+        }
+
+        private void cMenuJsonTreeCopyValue_Click(object sender, EventArgs e)
+        {
+            if (jsonTree != null && jsonTree.SelectedNode != null)
+            {
+                if (jsonTree.SelectedNode.Tag is string)
+                {
+                    string value = (string)jsonTree.SelectedNode.Tag;
+
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        Clipboard.SetText(value);
+                    }
+                }
+            }
+        }
+
+        private void jsonTree_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var node = jsonTree.HitTest(e.X, e.Y).Node;
+                jsonTree.SelectedNode = node;
             }
         }
     }

@@ -55,6 +55,7 @@
             this.cMenuBtnCopyAuthCode = new System.Windows.Forms.ToolStripMenuItem();
             this.cMenuBtnCopyToken = new System.Windows.Forms.ToolStripMenuItem();
             this.cMenuBtnCopyRToken = new System.Windows.Forms.ToolStripMenuItem();
+            this.cMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cMenuBtnClearAll = new System.Windows.Forms.ToolStripMenuItem();
             this.chkRunWithoutCookies = new System.Windows.Forms.CheckBox();
             this.txtInvokedEndpoint = new System.Windows.Forms.TextBox();
@@ -62,6 +63,8 @@
             this.btnRefreshParams = new System.Windows.Forms.Button();
             this.lblAction = new System.Windows.Forms.Label();
             this.gbSettings = new System.Windows.Forms.GroupBox();
+            this.lblClient = new System.Windows.Forms.Label();
+            this.cbxClients = new System.Windows.Forms.ComboBox();
             this.lblSpaceSep = new System.Windows.Forms.Label();
             this.txtScopes = new System.Windows.Forms.TextBox();
             this.lblScopes = new System.Windows.Forms.Label();
@@ -84,6 +87,12 @@
             this.txtAddressBar = new System.Windows.Forms.TextBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnCopyBase64 = new System.Windows.Forms.Button();
+            this.btnFromBase64 = new System.Windows.Forms.Button();
+            this.btnToBase64 = new System.Windows.Forms.Button();
+            this.txtBase64Output = new System.Windows.Forms.TextBox();
+            this.txtBase64Input = new System.Windows.Forms.TextBox();
             this.gbxBasicAuth = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.btnCopyBasicHeader = new System.Windows.Forms.Button();
@@ -94,17 +103,20 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.txtJsonString = new System.Windows.Forms.TextBox();
+            this.jsonTree = new System.Windows.Forms.TreeView();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.txtStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.cbxClients = new System.Windows.Forms.ComboBox();
-            this.lblClient = new System.Windows.Forms.Label();
-            this.cMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnCopyBase64 = new System.Windows.Forms.Button();
-            this.btnFromBase64 = new System.Windows.Forms.Button();
-            this.btnToBase64 = new System.Windows.Forms.Button();
-            this.txtBase64Output = new System.Windows.Forms.TextBox();
-            this.txtBase64Input = new System.Windows.Forms.TextBox();
+            this.tabJSONViewer = new System.Windows.Forms.TabControl();
+            this.tabPageViwer = new System.Windows.Forms.TabPage();
+            this.tabPageText = new System.Windows.Forms.TabPage();
+            this.panelTreeTextActions = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnCopyTreeText = new System.Windows.Forms.Button();
+            this.btnPasteTreeText = new System.Windows.Forms.Button();
+            this.cMenuJsonTree = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.cMenuJsonTreeCopyValue = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgParameters)).BeginInit();
             this.tbMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -113,9 +125,15 @@
             this.gbSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.tabPage3.SuspendLayout();
-            this.gbxBasicAuth.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.gbxBasicAuth.SuspendLayout();
+            this.tabPage4.SuspendLayout();
+            this.statusStrip.SuspendLayout();
+            this.tabJSONViewer.SuspendLayout();
+            this.tabPageViwer.SuspendLayout();
+            this.tabPageText.SuspendLayout();
+            this.panelTreeTextActions.SuspendLayout();
+            this.cMenuJsonTree.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblAuthEndpoint
@@ -224,12 +242,13 @@
             // 
             this.tbMain.Controls.Add(this.tabPage1);
             this.tbMain.Controls.Add(this.tabPage2);
+            this.tbMain.Controls.Add(this.tabPage4);
             this.tbMain.Controls.Add(this.tabPage3);
             this.tbMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbMain.Location = new System.Drawing.Point(0, 0);
             this.tbMain.Name = "tbMain";
             this.tbMain.SelectedIndex = 0;
-            this.tbMain.Size = new System.Drawing.Size(817, 761);
+            this.tbMain.Size = new System.Drawing.Size(817, 739);
             this.tbMain.TabIndex = 13;
             // 
             // tabPage1
@@ -251,7 +270,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(809, 735);
+            this.tabPage1.Size = new System.Drawing.Size(809, 713);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Request builder";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -277,7 +296,7 @@
             this.dgInvokeResults.ReadOnly = true;
             this.dgInvokeResults.RowHeadersVisible = false;
             this.dgInvokeResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgInvokeResults.Size = new System.Drawing.Size(795, 178);
+            this.dgInvokeResults.Size = new System.Drawing.Size(795, 171);
             this.dgInvokeResults.TabIndex = 40;
             this.dgInvokeResults.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dgInvokeResults_MouseDown);
             // 
@@ -367,6 +386,11 @@
             this.cMenuBtnCopyRToken.Text = "Copy refresh token";
             this.cMenuBtnCopyRToken.Click += new System.EventHandler(this.cMenuBtnCopyRToken_Click);
             // 
+            // cMenuSeparator2
+            // 
+            this.cMenuSeparator2.Name = "cMenuSeparator2";
+            this.cMenuSeparator2.Size = new System.Drawing.Size(201, 6);
+            // 
             // cMenuBtnClearAll
             // 
             this.cMenuBtnClearAll.Name = "cMenuBtnClearAll";
@@ -451,6 +475,27 @@
             this.gbSettings.TabIndex = 20;
             this.gbSettings.TabStop = false;
             this.gbSettings.Text = "Configuration";
+            // 
+            // lblClient
+            // 
+            this.lblClient.AutoSize = true;
+            this.lblClient.Location = new System.Drawing.Point(387, 20);
+            this.lblClient.Name = "lblClient";
+            this.lblClient.Size = new System.Drawing.Size(33, 13);
+            this.lblClient.TabIndex = 35;
+            this.lblClient.Text = "Client";
+            // 
+            // cbxClients
+            // 
+            this.cbxClients.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbxClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxClients.FormattingEnabled = true;
+            this.cbxClients.Location = new System.Drawing.Point(429, 17);
+            this.cbxClients.Name = "cbxClients";
+            this.cbxClients.Size = new System.Drawing.Size(359, 21);
+            this.cbxClients.TabIndex = 34;
+            this.cbxClients.SelectedIndexChanged += new System.EventHandler(this.cbxClients_SelectedIndexChanged);
             // 
             // lblSpaceSep
             // 
@@ -613,7 +658,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(809, 735);
+            this.tabPage2.Size = new System.Drawing.Size(809, 713);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Browser";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -656,7 +701,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.elementHost1.Location = new System.Drawing.Point(6, 38);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(797, 691);
+            this.elementHost1.Size = new System.Drawing.Size(797, 669);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = null;
@@ -667,10 +712,74 @@
             this.tabPage3.Controls.Add(this.gbxBasicAuth);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(809, 735);
+            this.tabPage3.Size = new System.Drawing.Size(809, 713);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Utilities";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.btnCopyBase64);
+            this.groupBox1.Controls.Add(this.btnFromBase64);
+            this.groupBox1.Controls.Add(this.btnToBase64);
+            this.groupBox1.Controls.Add(this.txtBase64Output);
+            this.groupBox1.Controls.Add(this.txtBase64Input);
+            this.groupBox1.Location = new System.Drawing.Point(3, 113);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(798, 104);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Base64 converter";
+            // 
+            // btnCopyBase64
+            // 
+            this.btnCopyBase64.Location = new System.Drawing.Point(384, 71);
+            this.btnCopyBase64.Name = "btnCopyBase64";
+            this.btnCopyBase64.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyBase64.TabIndex = 7;
+            this.btnCopyBase64.Text = "Copy";
+            this.btnCopyBase64.UseVisualStyleBackColor = true;
+            this.btnCopyBase64.Click += new System.EventHandler(this.btnCopyBase64_Click);
+            // 
+            // btnFromBase64
+            // 
+            this.btnFromBase64.Location = new System.Drawing.Point(323, 45);
+            this.btnFromBase64.Name = "btnFromBase64";
+            this.btnFromBase64.Size = new System.Drawing.Size(55, 20);
+            this.btnFromBase64.TabIndex = 6;
+            this.btnFromBase64.Text = "<<";
+            this.btnFromBase64.UseVisualStyleBackColor = true;
+            this.btnFromBase64.Click += new System.EventHandler(this.btnFromBase64_Click);
+            // 
+            // btnToBase64
+            // 
+            this.btnToBase64.Location = new System.Drawing.Point(323, 19);
+            this.btnToBase64.Name = "btnToBase64";
+            this.btnToBase64.Size = new System.Drawing.Size(55, 20);
+            this.btnToBase64.TabIndex = 5;
+            this.btnToBase64.Text = ">>";
+            this.btnToBase64.UseVisualStyleBackColor = true;
+            this.btnToBase64.Click += new System.EventHandler(this.btnToBase64_Click);
+            // 
+            // txtBase64Output
+            // 
+            this.txtBase64Output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtBase64Output.Location = new System.Drawing.Point(384, 19);
+            this.txtBase64Output.Multiline = true;
+            this.txtBase64Output.Name = "txtBase64Output";
+            this.txtBase64Output.Size = new System.Drawing.Size(408, 46);
+            this.txtBase64Output.TabIndex = 4;
+            // 
+            // txtBase64Input
+            // 
+            this.txtBase64Input.Location = new System.Drawing.Point(9, 19);
+            this.txtBase64Input.Multiline = true;
+            this.txtBase64Input.Name = "txtBase64Input";
+            this.txtBase64Input.Size = new System.Drawing.Size(308, 46);
+            this.txtBase64Input.TabIndex = 0;
             // 
             // gbxBasicAuth
             // 
@@ -774,6 +883,38 @@
             this.txtUserName.Size = new System.Drawing.Size(250, 20);
             this.txtUserName.TabIndex = 0;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.tabJSONViewer);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(809, 713);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "JSON viewer";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // txtJsonString
+            // 
+            this.txtJsonString.AcceptsReturn = true;
+            this.txtJsonString.AcceptsTab = true;
+            this.txtJsonString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtJsonString.Location = new System.Drawing.Point(3, 33);
+            this.txtJsonString.MaxLength = 10000000;
+            this.txtJsonString.Multiline = true;
+            this.txtJsonString.Name = "txtJsonString";
+            this.txtJsonString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtJsonString.Size = new System.Drawing.Size(795, 651);
+            this.txtJsonString.TabIndex = 1;
+            // 
+            // jsonTree
+            // 
+            this.jsonTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jsonTree.Location = new System.Drawing.Point(3, 3);
+            this.jsonTree.Name = "jsonTree";
+            this.jsonTree.Size = new System.Drawing.Size(795, 681);
+            this.jsonTree.TabIndex = 0;
+            this.jsonTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.jsonTree_MouseDown);
+            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -789,103 +930,103 @@
             this.txtStatusLabel.Name = "txtStatusLabel";
             this.txtStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
-            // cbxClients
+            // tabJSONViewer
             // 
-            this.cbxClients.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbxClients.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxClients.FormattingEnabled = true;
-            this.cbxClients.Location = new System.Drawing.Point(429, 17);
-            this.cbxClients.Name = "cbxClients";
-            this.cbxClients.Size = new System.Drawing.Size(359, 21);
-            this.cbxClients.TabIndex = 34;
-            this.cbxClients.SelectedIndexChanged += new System.EventHandler(this.cbxClients_SelectedIndexChanged);
+            this.tabJSONViewer.Controls.Add(this.tabPageViwer);
+            this.tabJSONViewer.Controls.Add(this.tabPageText);
+            this.tabJSONViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabJSONViewer.Location = new System.Drawing.Point(0, 0);
+            this.tabJSONViewer.Name = "tabJSONViewer";
+            this.tabJSONViewer.SelectedIndex = 0;
+            this.tabJSONViewer.Size = new System.Drawing.Size(809, 713);
+            this.tabJSONViewer.TabIndex = 3;
+            this.tabJSONViewer.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabJSONViewer_Selected);
             // 
-            // lblClient
+            // tabPageViwer
             // 
-            this.lblClient.AutoSize = true;
-            this.lblClient.Location = new System.Drawing.Point(387, 20);
-            this.lblClient.Name = "lblClient";
-            this.lblClient.Size = new System.Drawing.Size(33, 13);
-            this.lblClient.TabIndex = 35;
-            this.lblClient.Text = "Client";
+            this.tabPageViwer.Controls.Add(this.jsonTree);
+            this.tabPageViwer.Location = new System.Drawing.Point(4, 22);
+            this.tabPageViwer.Name = "tabPageViwer";
+            this.tabPageViwer.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageViwer.Size = new System.Drawing.Size(801, 687);
+            this.tabPageViwer.TabIndex = 0;
+            this.tabPageViwer.Text = "Viewer";
+            this.tabPageViwer.UseVisualStyleBackColor = true;
             // 
-            // cMenuSeparator2
+            // tabPageText
             // 
-            this.cMenuSeparator2.Name = "cMenuSeparator2";
-            this.cMenuSeparator2.Size = new System.Drawing.Size(201, 6);
+            this.tabPageText.Controls.Add(this.txtJsonString);
+            this.tabPageText.Controls.Add(this.panelTreeTextActions);
+            this.tabPageText.Location = new System.Drawing.Point(4, 22);
+            this.tabPageText.Name = "tabPageText";
+            this.tabPageText.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageText.Size = new System.Drawing.Size(801, 687);
+            this.tabPageText.TabIndex = 1;
+            this.tabPageText.Text = "Text";
+            this.tabPageText.UseVisualStyleBackColor = true;
             // 
-            // groupBox1
+            // panelTreeTextActions
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.btnCopyBase64);
-            this.groupBox1.Controls.Add(this.btnFromBase64);
-            this.groupBox1.Controls.Add(this.btnToBase64);
-            this.groupBox1.Controls.Add(this.txtBase64Output);
-            this.groupBox1.Controls.Add(this.txtBase64Input);
-            this.groupBox1.Location = new System.Drawing.Point(3, 113);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(798, 104);
-            this.groupBox1.TabIndex = 9;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Base64 converter";
+            this.panelTreeTextActions.Controls.Add(this.btnClear);
+            this.panelTreeTextActions.Controls.Add(this.btnCopyTreeText);
+            this.panelTreeTextActions.Controls.Add(this.btnPasteTreeText);
+            this.panelTreeTextActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTreeTextActions.Location = new System.Drawing.Point(3, 3);
+            this.panelTreeTextActions.Name = "panelTreeTextActions";
+            this.panelTreeTextActions.Size = new System.Drawing.Size(795, 30);
+            this.panelTreeTextActions.TabIndex = 2;
             // 
-            // btnCopyBase64
+            // btnClear
             // 
-            this.btnCopyBase64.Location = new System.Drawing.Point(384, 71);
-            this.btnCopyBase64.Name = "btnCopyBase64";
-            this.btnCopyBase64.Size = new System.Drawing.Size(75, 23);
-            this.btnCopyBase64.TabIndex = 7;
-            this.btnCopyBase64.Text = "Copy";
-            this.btnCopyBase64.UseVisualStyleBackColor = true;
-            this.btnCopyBase64.Click += new System.EventHandler(this.btnCopyBase64_Click);
+            this.btnClear.Location = new System.Drawing.Point(3, 3);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 0;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnFromBase64
+            // btnCopyTreeText
             // 
-            this.btnFromBase64.Location = new System.Drawing.Point(323, 45);
-            this.btnFromBase64.Name = "btnFromBase64";
-            this.btnFromBase64.Size = new System.Drawing.Size(55, 20);
-            this.btnFromBase64.TabIndex = 6;
-            this.btnFromBase64.Text = "<<";
-            this.btnFromBase64.UseVisualStyleBackColor = true;
-            this.btnFromBase64.Click += new System.EventHandler(this.btnFromBase64_Click);
+            this.btnCopyTreeText.Location = new System.Drawing.Point(84, 3);
+            this.btnCopyTreeText.Name = "btnCopyTreeText";
+            this.btnCopyTreeText.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyTreeText.TabIndex = 1;
+            this.btnCopyTreeText.Text = "Copy";
+            this.btnCopyTreeText.UseVisualStyleBackColor = true;
+            this.btnCopyTreeText.Click += new System.EventHandler(this.btnCopyTreeText_Click);
             // 
-            // btnToBase64
+            // btnPasteTreeText
             // 
-            this.btnToBase64.Location = new System.Drawing.Point(323, 19);
-            this.btnToBase64.Name = "btnToBase64";
-            this.btnToBase64.Size = new System.Drawing.Size(55, 20);
-            this.btnToBase64.TabIndex = 5;
-            this.btnToBase64.Text = ">>";
-            this.btnToBase64.UseVisualStyleBackColor = true;
-            this.btnToBase64.Click += new System.EventHandler(this.btnToBase64_Click);
+            this.btnPasteTreeText.Location = new System.Drawing.Point(165, 3);
+            this.btnPasteTreeText.Name = "btnPasteTreeText";
+            this.btnPasteTreeText.Size = new System.Drawing.Size(75, 23);
+            this.btnPasteTreeText.TabIndex = 2;
+            this.btnPasteTreeText.Text = "Paste";
+            this.btnPasteTreeText.UseVisualStyleBackColor = true;
+            this.btnPasteTreeText.Click += new System.EventHandler(this.btnPasteTreeText_Click);
             // 
-            // txtBase64Output
+            // cMenuJsonTree
             // 
-            this.txtBase64Output.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtBase64Output.Location = new System.Drawing.Point(384, 19);
-            this.txtBase64Output.Multiline = true;
-            this.txtBase64Output.Name = "txtBase64Output";
-            this.txtBase64Output.Size = new System.Drawing.Size(408, 46);
-            this.txtBase64Output.TabIndex = 4;
+            this.cMenuJsonTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cMenuJsonTreeCopyValue});
+            this.cMenuJsonTree.Name = "cMenuJsonTree";
+            this.cMenuJsonTree.Size = new System.Drawing.Size(134, 26);
             // 
-            // txtBase64Input
+            // cMenuJsonTreeCopyValue
             // 
-            this.txtBase64Input.Location = new System.Drawing.Point(9, 19);
-            this.txtBase64Input.Multiline = true;
-            this.txtBase64Input.Name = "txtBase64Input";
-            this.txtBase64Input.Size = new System.Drawing.Size(308, 46);
-            this.txtBase64Input.TabIndex = 0;
+            this.cMenuJsonTreeCopyValue.Name = "cMenuJsonTreeCopyValue";
+            this.cMenuJsonTreeCopyValue.Size = new System.Drawing.Size(133, 22);
+            this.cMenuJsonTreeCopyValue.Text = "Copy value";
+            this.cMenuJsonTreeCopyValue.Click += new System.EventHandler(this.cMenuJsonTreeCopyValue_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(817, 761);
-            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.tbMain);
+            this.Controls.Add(this.statusStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "OAuth2 console";
@@ -900,12 +1041,19 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             this.tabPage3.ResumeLayout(false);
-            this.gbxBasicAuth.ResumeLayout(false);
-            this.gbxBasicAuth.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.gbxBasicAuth.ResumeLayout(false);
+            this.gbxBasicAuth.PerformLayout();
+            this.tabPage4.ResumeLayout(false);
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
+            this.tabJSONViewer.ResumeLayout(false);
+            this.tabPageViwer.ResumeLayout(false);
+            this.tabPageText.ResumeLayout(false);
+            this.tabPageText.PerformLayout();
+            this.panelTreeTextActions.ResumeLayout(false);
+            this.cMenuJsonTree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -988,6 +1136,18 @@
         private System.Windows.Forms.Button btnToBase64;
         private System.Windows.Forms.TextBox txtBase64Output;
         private System.Windows.Forms.TextBox txtBase64Input;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.TreeView jsonTree;
+        private System.Windows.Forms.TextBox txtJsonString;
+        private System.Windows.Forms.TabControl tabJSONViewer;
+        private System.Windows.Forms.TabPage tabPageViwer;
+        private System.Windows.Forms.TabPage tabPageText;
+        private System.Windows.Forms.FlowLayoutPanel panelTreeTextActions;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.Button btnCopyTreeText;
+        private System.Windows.Forms.Button btnPasteTreeText;
+        private System.Windows.Forms.ContextMenuStrip cMenuJsonTree;
+        private System.Windows.Forms.ToolStripMenuItem cMenuJsonTreeCopyValue;
     }
 }
 
