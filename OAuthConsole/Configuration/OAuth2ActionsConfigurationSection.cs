@@ -94,10 +94,10 @@ namespace OAuthConsole.Configuration
         /// Gets a boolean value specifying whether the parameter has to be injected as header.
         /// </summary>
         /// <value>A boolean value specifying whether the parameter has to be injected as header</value>
-        [ConfigurationProperty("AsHeader", IsRequired = false, DefaultValue=false)]
-        public bool AsHeader
+        [ConfigurationProperty("ParameterType", IsRequired = false, DefaultValue = "GetOrPost")]
+        public string ParameterType
         {
-            get { return (bool)this["AsHeader"]; }
+            get { return (string)this["ParameterType"]; }
         }
     }
 

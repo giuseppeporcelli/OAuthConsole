@@ -50,6 +50,17 @@ namespace OAuthConsole
             dgInvokeResults.AutoGenerateColumns = false;
             dgInvokeResults.DataSource = _invokeResults;
 
+            List<Tuple<string, ParameterType>> parameterTypes = new List<Tuple<string, ParameterType>>();
+            parameterTypes.Add(new Tuple<string, ParameterType>(ParameterType.Cookie.ToString(), ParameterType.Cookie));
+            parameterTypes.Add(new Tuple<string, ParameterType>(ParameterType.GetOrPost.ToString(), ParameterType.GetOrPost));
+            parameterTypes.Add(new Tuple<string, ParameterType>(ParameterType.HttpHeader.ToString(), ParameterType.HttpHeader));
+            parameterTypes.Add(new Tuple<string, ParameterType>(ParameterType.RequestBody.ToString(), ParameterType.RequestBody));
+            parameterTypes.Add(new Tuple<string, ParameterType>(ParameterType.UrlSegment.ToString(), ParameterType.UrlSegment));
+
+            colParameterType.DataSource = parameterTypes;
+            colParameterType.DisplayMember = "Item1";
+            colParameterType.ValueMember = "Item2";
+
             LoadConfiguration();
 
             ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(DefaultPageAddress);
@@ -286,6 +297,8 @@ namespace OAuthConsole
         {
             cbxMethod.SelectedIndex = 0;
 
+            _parameters.Add(new RestParameter());
+
             dgParameters.AutoGenerateColumns = false;
             dgParameters.DataSource = _parameters;
 
@@ -338,23 +351,12 @@ namespace OAuthConsole
                             parameter.Value = "";
                         }
 
-                        if (parameter.IsHeader)
+                        if (parameter.ParameterType == ParameterType.HttpHeader)
                         {
-                            request.AddHeader(parameter.Name, parameter.Value);
                             additionalHeaders.Append(parameter.Name + ": " + parameter.Value + Environment.NewLine);
                         }
-                        else
-                        {
-                            request.AddParameter(parameter.Name, parameter.Value);
-                        }
-                    }
-                }
 
-                if (!string.IsNullOrWhiteSpace(txtRequestBody.Text))
-                {
-                    if (method == "POST")
-                    {                        
-                        request.AddParameter("application/json", txtRequestBody.Text, ParameterType.RequestBody);
+                        request.AddParameter(parameter.Name, parameter.Value, parameter.ParameterType);
                     }
                 }
 
@@ -501,7 +503,7 @@ namespace OAuthConsole
                         var restParameter = new RestParameter();
                         restParameter.Name = parameter.Name;
                         restParameter.Value = value;
-                        restParameter.IsHeader = parameter.AsHeader;
+                        restParameter.ParameterType = (ParameterType)Enum.Parse(typeof(ParameterType), parameter.ParameterType);
 
                         _parameters.Add(restParameter);
                     }
@@ -513,14 +515,14 @@ namespace OAuthConsole
         {
             public RestParameter()
             {
-                IsHeader = false;
                 Name = "";
                 Value = "";
+                ParameterType = ParameterType.GetOrPost;
             }
 
             public string Name { get; set; }
             public string Value { get; set; }
-            public bool IsHeader { get; set; }
+            public ParameterType ParameterType { get; set; }
         }
 
         private void btnRefreshParams_Click(object sender, EventArgs e)
@@ -947,6 +949,15 @@ namespace OAuthConsole
             {
                 var node = jsonTree.HitTest(e.X, e.Y).Node;
                 jsonTree.SelectedNode = node;
+            }
+        }
+
+        private void dgParameters_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is TextBox)
+            {
+                TextBox tbx = e.Control as TextBox;
+                tbx.Multiline = true;
             }
         }
     }

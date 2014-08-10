@@ -29,24 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.lblAuthEndpoint = new System.Windows.Forms.Label();
             this.txtAuthEndpoint = new System.Windows.Forms.TextBox();
             this.lblMethod = new System.Windows.Forms.Label();
             this.cbxMethod = new System.Windows.Forms.ComboBox();
             this.dgParameters = new System.Windows.Forms.DataGridView();
-            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.asHeader = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.cbxActions = new System.Windows.Forms.ComboBox();
             this.btnInvoke = new System.Windows.Forms.Button();
             this.tbMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabParamAndBody = new System.Windows.Forms.TabControl();
-            this.tabParam = new System.Windows.Forms.TabPage();
             this.btnRefreshParams = new System.Windows.Forms.Button();
-            this.tabBody = new System.Windows.Forms.TabPage();
-            this.txtRequestBody = new System.Windows.Forms.TextBox();
             this.dgInvokeResults = new System.Windows.Forms.DataGridView();
             this.colNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -120,12 +114,13 @@
             this.txtStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.cMenuJsonTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cMenuJsonTreeCopyValue = new System.Windows.Forms.ToolStripMenuItem();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colParameterType = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.lblContentType = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgParameters)).BeginInit();
             this.tbMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabParamAndBody.SuspendLayout();
-            this.tabParam.SuspendLayout();
-            this.tabBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInvokeResults)).BeginInit();
             this.cMenuGridResults.SuspendLayout();
             this.gbSettings.SuspendLayout();
@@ -186,34 +181,17 @@
             this.dgParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgParameters.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dgParameters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgParameters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colName,
             this.colValue,
-            this.asHeader});
-            this.dgParameters.Location = new System.Drawing.Point(83, 6);
+            this.colParameterType});
+            this.dgParameters.Location = new System.Drawing.Point(121, 338);
             this.dgParameters.Name = "dgParameters";
-            this.dgParameters.Size = new System.Drawing.Size(687, 129);
+            this.dgParameters.Size = new System.Drawing.Size(680, 156);
             this.dgParameters.TabIndex = 6;
-            // 
-            // colName
-            // 
-            this.colName.DataPropertyName = "Name";
-            this.colName.HeaderText = "Name";
-            this.colName.Name = "colName";
-            // 
-            // colValue
-            // 
-            this.colValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.colValue.DataPropertyName = "Value";
-            this.colValue.HeaderText = "Value";
-            this.colValue.Name = "colValue";
-            // 
-            // asHeader
-            // 
-            this.asHeader.DataPropertyName = "IsHeader";
-            this.asHeader.HeaderText = "As Header";
-            this.asHeader.Name = "asHeader";
+            this.dgParameters.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.dgParameters_EditingControlShowing);
             // 
             // cbxActions
             // 
@@ -227,7 +205,7 @@
             // 
             // btnInvoke
             // 
-            this.btnInvoke.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnInvoke.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnInvoke.Location = new System.Drawing.Point(639, 500);
             this.btnInvoke.Name = "btnInvoke";
             this.btnInvoke.Size = new System.Drawing.Size(162, 30);
@@ -251,7 +229,9 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.tabParamAndBody);
+            this.tabPage1.Controls.Add(this.lblContentType);
+            this.tabPage1.Controls.Add(this.dgParameters);
+            this.tabPage1.Controls.Add(this.btnRefreshParams);
             this.tabPage1.Controls.Add(this.dgInvokeResults);
             this.tabPage1.Controls.Add(this.chkRunWithoutCookies);
             this.tabPage1.Controls.Add(this.txtInvokedEndpoint);
@@ -271,71 +251,22 @@
             this.tabPage1.Text = "Request builder";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabParamAndBody
-            // 
-            this.tabParamAndBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabParamAndBody.Controls.Add(this.tabParam);
-            this.tabParamAndBody.Controls.Add(this.tabBody);
-            this.tabParamAndBody.Location = new System.Drawing.Point(17, 327);
-            this.tabParamAndBody.Name = "tabParamAndBody";
-            this.tabParamAndBody.SelectedIndex = 0;
-            this.tabParamAndBody.Size = new System.Drawing.Size(784, 167);
-            this.tabParamAndBody.TabIndex = 41;
-            // 
-            // tabParam
-            // 
-            this.tabParam.Controls.Add(this.dgParameters);
-            this.tabParam.Controls.Add(this.btnRefreshParams);
-            this.tabParam.Location = new System.Drawing.Point(4, 22);
-            this.tabParam.Name = "tabParam";
-            this.tabParam.Padding = new System.Windows.Forms.Padding(3);
-            this.tabParam.Size = new System.Drawing.Size(776, 141);
-            this.tabParam.TabIndex = 0;
-            this.tabParam.Text = "Parameters";
-            this.tabParam.UseVisualStyleBackColor = true;
-            // 
             // btnRefreshParams
             // 
-            this.btnRefreshParams.Location = new System.Drawing.Point(6, 6);
+            this.btnRefreshParams.Location = new System.Drawing.Point(12, 338);
             this.btnRefreshParams.Name = "btnRefreshParams";
-            this.btnRefreshParams.Size = new System.Drawing.Size(71, 26);
+            this.btnRefreshParams.Size = new System.Drawing.Size(99, 26);
             this.btnRefreshParams.TabIndex = 22;
             this.btnRefreshParams.Text = "Refresh";
             this.btnRefreshParams.UseVisualStyleBackColor = true;
             this.btnRefreshParams.Click += new System.EventHandler(this.btnRefreshParams_Click);
-            // 
-            // tabBody
-            // 
-            this.tabBody.Controls.Add(this.txtRequestBody);
-            this.tabBody.Location = new System.Drawing.Point(4, 22);
-            this.tabBody.Name = "tabBody";
-            this.tabBody.Padding = new System.Windows.Forms.Padding(3);
-            this.tabBody.Size = new System.Drawing.Size(776, 141);
-            this.tabBody.TabIndex = 1;
-            this.tabBody.Text = "Body";
-            this.tabBody.UseVisualStyleBackColor = true;
-            // 
-            // txtRequestBody
-            // 
-            this.txtRequestBody.AcceptsReturn = true;
-            this.txtRequestBody.AcceptsTab = true;
-            this.txtRequestBody.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtRequestBody.Location = new System.Drawing.Point(3, 3);
-            this.txtRequestBody.Multiline = true;
-            this.txtRequestBody.Name = "txtRequestBody";
-            this.txtRequestBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtRequestBody.Size = new System.Drawing.Size(770, 135);
-            this.txtRequestBody.TabIndex = 0;
             // 
             // dgInvokeResults
             // 
             this.dgInvokeResults.AllowUserToAddRows = false;
             this.dgInvokeResults.AllowUserToDeleteRows = false;
             this.dgInvokeResults.AllowUserToResizeRows = false;
-            this.dgInvokeResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgInvokeResults.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgInvokeResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgInvokeResults.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -1064,6 +995,40 @@
             this.cMenuJsonTreeCopyValue.Text = "Copy value";
             this.cMenuJsonTreeCopyValue.Click += new System.EventHandler(this.cMenuJsonTreeCopyValue_Click);
             // 
+            // colName
+            // 
+            this.colName.DataPropertyName = "Name";
+            this.colName.HeaderText = "Name";
+            this.colName.Name = "colName";
+            // 
+            // colValue
+            // 
+            this.colValue.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.colValue.DataPropertyName = "Value";
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.colValue.DefaultCellStyle = dataGridViewCellStyle1;
+            this.colValue.HeaderText = "Value";
+            this.colValue.MaxInputLength = 10000000;
+            this.colValue.Name = "colValue";
+            // 
+            // colParameterType
+            // 
+            this.colParameterType.AutoComplete = false;
+            this.colParameterType.DataPropertyName = "ParameterType";
+            this.colParameterType.HeaderText = "Parameter Type";
+            this.colParameterType.Name = "colParameterType";
+            // 
+            // lblContentType
+            // 
+            this.lblContentType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblContentType.AutoSize = true;
+            this.lblContentType.Location = new System.Drawing.Point(118, 500);
+            this.lblContentType.Name = "lblContentType";
+            this.lblContentType.Size = new System.Drawing.Size(508, 13);
+            this.lblContentType.TabIndex = 41;
+            this.lblContentType.Text = "When the parameter type is RequestBody, use the content type (e.g. application/js" +
+    "on) as parameter name.";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1078,10 +1043,6 @@
             this.tbMain.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.tabParamAndBody.ResumeLayout(false);
-            this.tabParam.ResumeLayout(false);
-            this.tabBody.ResumeLayout(false);
-            this.tabBody.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInvokeResults)).EndInit();
             this.cMenuGridResults.ResumeLayout(false);
             this.gbSettings.ResumeLayout(false);
@@ -1192,13 +1153,10 @@
         private System.Windows.Forms.Button btnPasteTreeText;
         private System.Windows.Forms.ContextMenuStrip cMenuJsonTree;
         private System.Windows.Forms.ToolStripMenuItem cMenuJsonTreeCopyValue;
-        private System.Windows.Forms.TabControl tabParamAndBody;
-        private System.Windows.Forms.TabPage tabParam;
-        private System.Windows.Forms.TabPage tabBody;
-        private System.Windows.Forms.TextBox txtRequestBody;
         private System.Windows.Forms.DataGridViewTextBoxColumn colName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colValue;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn asHeader;
+        private System.Windows.Forms.DataGridViewComboBoxColumn colParameterType;
+        private System.Windows.Forms.Label lblContentType;
     }
 }
 
