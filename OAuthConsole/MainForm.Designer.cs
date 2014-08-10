@@ -38,11 +38,15 @@
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.asHeader = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.lblParameters = new System.Windows.Forms.Label();
             this.cbxActions = new System.Windows.Forms.ComboBox();
             this.btnInvoke = new System.Windows.Forms.Button();
             this.tbMain = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.tabParamAndBody = new System.Windows.Forms.TabControl();
+            this.tabParam = new System.Windows.Forms.TabPage();
+            this.btnRefreshParams = new System.Windows.Forms.Button();
+            this.tabBody = new System.Windows.Forms.TabPage();
+            this.txtRequestBody = new System.Windows.Forms.TextBox();
             this.dgInvokeResults = new System.Windows.Forms.DataGridView();
             this.colNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -60,7 +64,6 @@
             this.chkRunWithoutCookies = new System.Windows.Forms.CheckBox();
             this.txtInvokedEndpoint = new System.Windows.Forms.TextBox();
             this.lblInvokedEndpoint = new System.Windows.Forms.Label();
-            this.btnRefreshParams = new System.Windows.Forms.Button();
             this.lblAction = new System.Windows.Forms.Label();
             this.gbSettings = new System.Windows.Forms.GroupBox();
             this.lblClient = new System.Windows.Forms.Label();
@@ -86,6 +89,16 @@
             this.btnGo = new System.Windows.Forms.Button();
             this.txtAddressBar = new System.Windows.Forms.TextBox();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.tabJSONViewer = new System.Windows.Forms.TabControl();
+            this.tabPageViwer = new System.Windows.Forms.TabPage();
+            this.jsonTree = new System.Windows.Forms.TreeView();
+            this.tabPageText = new System.Windows.Forms.TabPage();
+            this.txtJsonString = new System.Windows.Forms.TextBox();
+            this.panelTreeTextActions = new System.Windows.Forms.FlowLayoutPanel();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.btnCopyTreeText = new System.Windows.Forms.Button();
+            this.btnPasteTreeText = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnCopyBase64 = new System.Windows.Forms.Button();
@@ -103,36 +116,29 @@
             this.txtPassword = new System.Windows.Forms.TextBox();
             this.lblUserName = new System.Windows.Forms.Label();
             this.txtUserName = new System.Windows.Forms.TextBox();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.txtJsonString = new System.Windows.Forms.TextBox();
-            this.jsonTree = new System.Windows.Forms.TreeView();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.txtStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tabJSONViewer = new System.Windows.Forms.TabControl();
-            this.tabPageViwer = new System.Windows.Forms.TabPage();
-            this.tabPageText = new System.Windows.Forms.TabPage();
-            this.panelTreeTextActions = new System.Windows.Forms.FlowLayoutPanel();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.btnCopyTreeText = new System.Windows.Forms.Button();
-            this.btnPasteTreeText = new System.Windows.Forms.Button();
             this.cMenuJsonTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cMenuJsonTreeCopyValue = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dgParameters)).BeginInit();
             this.tbMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabParamAndBody.SuspendLayout();
+            this.tabParam.SuspendLayout();
+            this.tabBody.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInvokeResults)).BeginInit();
             this.cMenuGridResults.SuspendLayout();
             this.gbSettings.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.gbxBasicAuth.SuspendLayout();
             this.tabPage4.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.tabJSONViewer.SuspendLayout();
             this.tabPageViwer.SuspendLayout();
             this.tabPageText.SuspendLayout();
             this.panelTreeTextActions.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.gbxBasicAuth.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.cMenuJsonTree.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -177,16 +183,17 @@
             // 
             // dgParameters
             // 
-            this.dgParameters.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgParameters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgParameters.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgParameters.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colName,
             this.colValue,
             this.asHeader});
-            this.dgParameters.Location = new System.Drawing.Point(121, 336);
+            this.dgParameters.Location = new System.Drawing.Point(83, 6);
             this.dgParameters.Name = "dgParameters";
-            this.dgParameters.Size = new System.Drawing.Size(680, 158);
+            this.dgParameters.Size = new System.Drawing.Size(687, 129);
             this.dgParameters.TabIndex = 6;
             // 
             // colName
@@ -204,18 +211,9 @@
             // 
             // asHeader
             // 
-            this.asHeader.DataPropertyName = "InjectInHeader";
+            this.asHeader.DataPropertyName = "IsHeader";
             this.asHeader.HeaderText = "As Header";
             this.asHeader.Name = "asHeader";
-            // 
-            // lblParameters
-            // 
-            this.lblParameters.AutoSize = true;
-            this.lblParameters.Location = new System.Drawing.Point(15, 336);
-            this.lblParameters.Name = "lblParameters";
-            this.lblParameters.Size = new System.Drawing.Size(60, 13);
-            this.lblParameters.TabIndex = 7;
-            this.lblParameters.Text = "Parameters";
             // 
             // cbxActions
             // 
@@ -253,17 +251,15 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.tabParamAndBody);
             this.tabPage1.Controls.Add(this.dgInvokeResults);
             this.tabPage1.Controls.Add(this.chkRunWithoutCookies);
             this.tabPage1.Controls.Add(this.txtInvokedEndpoint);
             this.tabPage1.Controls.Add(this.lblInvokedEndpoint);
-            this.tabPage1.Controls.Add(this.btnRefreshParams);
             this.tabPage1.Controls.Add(this.lblAction);
             this.tabPage1.Controls.Add(this.gbSettings);
             this.tabPage1.Controls.Add(this.btnInvoke);
             this.tabPage1.Controls.Add(this.cbxActions);
-            this.tabPage1.Controls.Add(this.lblParameters);
-            this.tabPage1.Controls.Add(this.dgParameters);
             this.tabPage1.Controls.Add(this.cbBrowse);
             this.tabPage1.Controls.Add(this.lblMethod);
             this.tabPage1.Controls.Add(this.cbxMethod);
@@ -274,6 +270,64 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Request builder";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabParamAndBody
+            // 
+            this.tabParamAndBody.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabParamAndBody.Controls.Add(this.tabParam);
+            this.tabParamAndBody.Controls.Add(this.tabBody);
+            this.tabParamAndBody.Location = new System.Drawing.Point(17, 327);
+            this.tabParamAndBody.Name = "tabParamAndBody";
+            this.tabParamAndBody.SelectedIndex = 0;
+            this.tabParamAndBody.Size = new System.Drawing.Size(784, 167);
+            this.tabParamAndBody.TabIndex = 41;
+            // 
+            // tabParam
+            // 
+            this.tabParam.Controls.Add(this.dgParameters);
+            this.tabParam.Controls.Add(this.btnRefreshParams);
+            this.tabParam.Location = new System.Drawing.Point(4, 22);
+            this.tabParam.Name = "tabParam";
+            this.tabParam.Padding = new System.Windows.Forms.Padding(3);
+            this.tabParam.Size = new System.Drawing.Size(776, 141);
+            this.tabParam.TabIndex = 0;
+            this.tabParam.Text = "Parameters";
+            this.tabParam.UseVisualStyleBackColor = true;
+            // 
+            // btnRefreshParams
+            // 
+            this.btnRefreshParams.Location = new System.Drawing.Point(6, 6);
+            this.btnRefreshParams.Name = "btnRefreshParams";
+            this.btnRefreshParams.Size = new System.Drawing.Size(71, 26);
+            this.btnRefreshParams.TabIndex = 22;
+            this.btnRefreshParams.Text = "Refresh";
+            this.btnRefreshParams.UseVisualStyleBackColor = true;
+            this.btnRefreshParams.Click += new System.EventHandler(this.btnRefreshParams_Click);
+            // 
+            // tabBody
+            // 
+            this.tabBody.Controls.Add(this.txtRequestBody);
+            this.tabBody.Location = new System.Drawing.Point(4, 22);
+            this.tabBody.Name = "tabBody";
+            this.tabBody.Padding = new System.Windows.Forms.Padding(3);
+            this.tabBody.Size = new System.Drawing.Size(776, 141);
+            this.tabBody.TabIndex = 1;
+            this.tabBody.Text = "Body";
+            this.tabBody.UseVisualStyleBackColor = true;
+            // 
+            // txtRequestBody
+            // 
+            this.txtRequestBody.AcceptsReturn = true;
+            this.txtRequestBody.AcceptsTab = true;
+            this.txtRequestBody.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtRequestBody.Location = new System.Drawing.Point(3, 3);
+            this.txtRequestBody.Multiline = true;
+            this.txtRequestBody.Name = "txtRequestBody";
+            this.txtRequestBody.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtRequestBody.Size = new System.Drawing.Size(770, 135);
+            this.txtRequestBody.TabIndex = 0;
             // 
             // dgInvokeResults
             // 
@@ -425,16 +479,6 @@
             this.lblInvokedEndpoint.Size = new System.Drawing.Size(90, 13);
             this.lblInvokedEndpoint.TabIndex = 34;
             this.lblInvokedEndpoint.Text = "Invoked endpoint";
-            // 
-            // btnRefreshParams
-            // 
-            this.btnRefreshParams.Location = new System.Drawing.Point(17, 352);
-            this.btnRefreshParams.Name = "btnRefreshParams";
-            this.btnRefreshParams.Size = new System.Drawing.Size(53, 23);
-            this.btnRefreshParams.TabIndex = 22;
-            this.btnRefreshParams.Text = "Refresh";
-            this.btnRefreshParams.UseVisualStyleBackColor = true;
-            this.btnRefreshParams.Click += new System.EventHandler(this.btnRefreshParams_Click);
             // 
             // lblAction
             // 
@@ -706,6 +750,114 @@
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = null;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.tabJSONViewer);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Size = new System.Drawing.Size(809, 713);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "JSON viewer";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // tabJSONViewer
+            // 
+            this.tabJSONViewer.Controls.Add(this.tabPageViwer);
+            this.tabJSONViewer.Controls.Add(this.tabPageText);
+            this.tabJSONViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabJSONViewer.Location = new System.Drawing.Point(0, 0);
+            this.tabJSONViewer.Name = "tabJSONViewer";
+            this.tabJSONViewer.SelectedIndex = 0;
+            this.tabJSONViewer.Size = new System.Drawing.Size(809, 713);
+            this.tabJSONViewer.TabIndex = 3;
+            this.tabJSONViewer.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabJSONViewer_Selected);
+            // 
+            // tabPageViwer
+            // 
+            this.tabPageViwer.Controls.Add(this.jsonTree);
+            this.tabPageViwer.Location = new System.Drawing.Point(4, 22);
+            this.tabPageViwer.Name = "tabPageViwer";
+            this.tabPageViwer.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageViwer.Size = new System.Drawing.Size(801, 687);
+            this.tabPageViwer.TabIndex = 0;
+            this.tabPageViwer.Text = "Viewer";
+            this.tabPageViwer.UseVisualStyleBackColor = true;
+            // 
+            // jsonTree
+            // 
+            this.jsonTree.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.jsonTree.Location = new System.Drawing.Point(3, 3);
+            this.jsonTree.Name = "jsonTree";
+            this.jsonTree.Size = new System.Drawing.Size(795, 681);
+            this.jsonTree.TabIndex = 0;
+            this.jsonTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.jsonTree_MouseDown);
+            // 
+            // tabPageText
+            // 
+            this.tabPageText.Controls.Add(this.txtJsonString);
+            this.tabPageText.Controls.Add(this.panelTreeTextActions);
+            this.tabPageText.Location = new System.Drawing.Point(4, 22);
+            this.tabPageText.Name = "tabPageText";
+            this.tabPageText.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageText.Size = new System.Drawing.Size(801, 687);
+            this.tabPageText.TabIndex = 1;
+            this.tabPageText.Text = "Text";
+            this.tabPageText.UseVisualStyleBackColor = true;
+            // 
+            // txtJsonString
+            // 
+            this.txtJsonString.AcceptsReturn = true;
+            this.txtJsonString.AcceptsTab = true;
+            this.txtJsonString.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtJsonString.Location = new System.Drawing.Point(3, 33);
+            this.txtJsonString.MaxLength = 10000000;
+            this.txtJsonString.Multiline = true;
+            this.txtJsonString.Name = "txtJsonString";
+            this.txtJsonString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtJsonString.Size = new System.Drawing.Size(795, 651);
+            this.txtJsonString.TabIndex = 1;
+            // 
+            // panelTreeTextActions
+            // 
+            this.panelTreeTextActions.Controls.Add(this.btnClear);
+            this.panelTreeTextActions.Controls.Add(this.btnCopyTreeText);
+            this.panelTreeTextActions.Controls.Add(this.btnPasteTreeText);
+            this.panelTreeTextActions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTreeTextActions.Location = new System.Drawing.Point(3, 3);
+            this.panelTreeTextActions.Name = "panelTreeTextActions";
+            this.panelTreeTextActions.Size = new System.Drawing.Size(795, 30);
+            this.panelTreeTextActions.TabIndex = 2;
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(3, 3);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 0;
+            this.btnClear.Text = "Clear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // btnCopyTreeText
+            // 
+            this.btnCopyTreeText.Location = new System.Drawing.Point(84, 3);
+            this.btnCopyTreeText.Name = "btnCopyTreeText";
+            this.btnCopyTreeText.Size = new System.Drawing.Size(75, 23);
+            this.btnCopyTreeText.TabIndex = 1;
+            this.btnCopyTreeText.Text = "Copy";
+            this.btnCopyTreeText.UseVisualStyleBackColor = true;
+            this.btnCopyTreeText.Click += new System.EventHandler(this.btnCopyTreeText_Click);
+            // 
+            // btnPasteTreeText
+            // 
+            this.btnPasteTreeText.Location = new System.Drawing.Point(165, 3);
+            this.btnPasteTreeText.Name = "btnPasteTreeText";
+            this.btnPasteTreeText.Size = new System.Drawing.Size(75, 23);
+            this.btnPasteTreeText.TabIndex = 2;
+            this.btnPasteTreeText.Text = "Paste";
+            this.btnPasteTreeText.UseVisualStyleBackColor = true;
+            this.btnPasteTreeText.Click += new System.EventHandler(this.btnPasteTreeText_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.groupBox1);
@@ -883,38 +1035,6 @@
             this.txtUserName.Size = new System.Drawing.Size(250, 20);
             this.txtUserName.TabIndex = 0;
             // 
-            // tabPage4
-            // 
-            this.tabPage4.Controls.Add(this.tabJSONViewer);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Size = new System.Drawing.Size(809, 713);
-            this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "JSON viewer";
-            this.tabPage4.UseVisualStyleBackColor = true;
-            // 
-            // txtJsonString
-            // 
-            this.txtJsonString.AcceptsReturn = true;
-            this.txtJsonString.AcceptsTab = true;
-            this.txtJsonString.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtJsonString.Location = new System.Drawing.Point(3, 33);
-            this.txtJsonString.MaxLength = 10000000;
-            this.txtJsonString.Multiline = true;
-            this.txtJsonString.Name = "txtJsonString";
-            this.txtJsonString.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtJsonString.Size = new System.Drawing.Size(795, 651);
-            this.txtJsonString.TabIndex = 1;
-            // 
-            // jsonTree
-            // 
-            this.jsonTree.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.jsonTree.Location = new System.Drawing.Point(3, 3);
-            this.jsonTree.Name = "jsonTree";
-            this.jsonTree.Size = new System.Drawing.Size(795, 681);
-            this.jsonTree.TabIndex = 0;
-            this.jsonTree.MouseDown += new System.Windows.Forms.MouseEventHandler(this.jsonTree_MouseDown);
-            // 
             // statusStrip
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -929,82 +1049,6 @@
             // 
             this.txtStatusLabel.Name = "txtStatusLabel";
             this.txtStatusLabel.Size = new System.Drawing.Size(0, 17);
-            // 
-            // tabJSONViewer
-            // 
-            this.tabJSONViewer.Controls.Add(this.tabPageViwer);
-            this.tabJSONViewer.Controls.Add(this.tabPageText);
-            this.tabJSONViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabJSONViewer.Location = new System.Drawing.Point(0, 0);
-            this.tabJSONViewer.Name = "tabJSONViewer";
-            this.tabJSONViewer.SelectedIndex = 0;
-            this.tabJSONViewer.Size = new System.Drawing.Size(809, 713);
-            this.tabJSONViewer.TabIndex = 3;
-            this.tabJSONViewer.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabJSONViewer_Selected);
-            // 
-            // tabPageViwer
-            // 
-            this.tabPageViwer.Controls.Add(this.jsonTree);
-            this.tabPageViwer.Location = new System.Drawing.Point(4, 22);
-            this.tabPageViwer.Name = "tabPageViwer";
-            this.tabPageViwer.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageViwer.Size = new System.Drawing.Size(801, 687);
-            this.tabPageViwer.TabIndex = 0;
-            this.tabPageViwer.Text = "Viewer";
-            this.tabPageViwer.UseVisualStyleBackColor = true;
-            // 
-            // tabPageText
-            // 
-            this.tabPageText.Controls.Add(this.txtJsonString);
-            this.tabPageText.Controls.Add(this.panelTreeTextActions);
-            this.tabPageText.Location = new System.Drawing.Point(4, 22);
-            this.tabPageText.Name = "tabPageText";
-            this.tabPageText.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageText.Size = new System.Drawing.Size(801, 687);
-            this.tabPageText.TabIndex = 1;
-            this.tabPageText.Text = "Text";
-            this.tabPageText.UseVisualStyleBackColor = true;
-            // 
-            // panelTreeTextActions
-            // 
-            this.panelTreeTextActions.Controls.Add(this.btnClear);
-            this.panelTreeTextActions.Controls.Add(this.btnCopyTreeText);
-            this.panelTreeTextActions.Controls.Add(this.btnPasteTreeText);
-            this.panelTreeTextActions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTreeTextActions.Location = new System.Drawing.Point(3, 3);
-            this.panelTreeTextActions.Name = "panelTreeTextActions";
-            this.panelTreeTextActions.Size = new System.Drawing.Size(795, 30);
-            this.panelTreeTextActions.TabIndex = 2;
-            // 
-            // btnClear
-            // 
-            this.btnClear.Location = new System.Drawing.Point(3, 3);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(75, 23);
-            this.btnClear.TabIndex = 0;
-            this.btnClear.Text = "Clear";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // btnCopyTreeText
-            // 
-            this.btnCopyTreeText.Location = new System.Drawing.Point(84, 3);
-            this.btnCopyTreeText.Name = "btnCopyTreeText";
-            this.btnCopyTreeText.Size = new System.Drawing.Size(75, 23);
-            this.btnCopyTreeText.TabIndex = 1;
-            this.btnCopyTreeText.Text = "Copy";
-            this.btnCopyTreeText.UseVisualStyleBackColor = true;
-            this.btnCopyTreeText.Click += new System.EventHandler(this.btnCopyTreeText_Click);
-            // 
-            // btnPasteTreeText
-            // 
-            this.btnPasteTreeText.Location = new System.Drawing.Point(165, 3);
-            this.btnPasteTreeText.Name = "btnPasteTreeText";
-            this.btnPasteTreeText.Size = new System.Drawing.Size(75, 23);
-            this.btnPasteTreeText.TabIndex = 2;
-            this.btnPasteTreeText.Text = "Paste";
-            this.btnPasteTreeText.UseVisualStyleBackColor = true;
-            this.btnPasteTreeText.Click += new System.EventHandler(this.btnPasteTreeText_Click);
             // 
             // cMenuJsonTree
             // 
@@ -1034,25 +1078,29 @@
             this.tbMain.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabParamAndBody.ResumeLayout(false);
+            this.tabParam.ResumeLayout(false);
+            this.tabBody.ResumeLayout(false);
+            this.tabBody.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgInvokeResults)).EndInit();
             this.cMenuGridResults.ResumeLayout(false);
             this.gbSettings.ResumeLayout(false);
             this.gbSettings.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
-            this.tabPage3.ResumeLayout(false);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.gbxBasicAuth.ResumeLayout(false);
-            this.gbxBasicAuth.PerformLayout();
             this.tabPage4.ResumeLayout(false);
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.tabJSONViewer.ResumeLayout(false);
             this.tabPageViwer.ResumeLayout(false);
             this.tabPageText.ResumeLayout(false);
             this.tabPageText.PerformLayout();
             this.panelTreeTextActions.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.gbxBasicAuth.ResumeLayout(false);
+            this.gbxBasicAuth.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.cMenuJsonTree.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1066,7 +1114,6 @@
         private System.Windows.Forms.Label lblMethod;
         private System.Windows.Forms.ComboBox cbxMethod;
         private System.Windows.Forms.DataGridView dgParameters;
-        private System.Windows.Forms.Label lblParameters;
         private System.Windows.Forms.ComboBox cbxActions;
         private System.Windows.Forms.Button btnInvoke;
         private System.Windows.Forms.TabControl tbMain;
@@ -1081,9 +1128,6 @@
         private System.Windows.Forms.Label lblProvider;
         private System.Windows.Forms.TextBox txtResourceEndpoint;
         private System.Windows.Forms.Label lblResourceEndpoint;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colValue;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn asHeader;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private System.Windows.Forms.TextBox txtAddressBar;
         private System.Windows.Forms.TextBox txtClientSecret;
@@ -1148,6 +1192,13 @@
         private System.Windows.Forms.Button btnPasteTreeText;
         private System.Windows.Forms.ContextMenuStrip cMenuJsonTree;
         private System.Windows.Forms.ToolStripMenuItem cMenuJsonTreeCopyValue;
+        private System.Windows.Forms.TabControl tabParamAndBody;
+        private System.Windows.Forms.TabPage tabParam;
+        private System.Windows.Forms.TabPage tabBody;
+        private System.Windows.Forms.TextBox txtRequestBody;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colValue;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn asHeader;
     }
 }
 

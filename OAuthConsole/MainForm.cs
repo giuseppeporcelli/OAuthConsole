@@ -135,7 +135,21 @@ namespace OAuthConsole
                 {
                     JValue jValue = (JValue)token;
 
-                    TreeNode node = new TreeNode(jValue.Value.ToString());
+                    string value = "";
+
+                    if (jValue.Type == JTokenType.Null)
+                    {
+                        value = "null";
+                    }
+                    else
+                    {
+                        value = jValue.Value.ToString();
+                    }
+
+                    TreeNode node = new TreeNode(value);
+                    node.Tag = value;
+                    node.ContextMenuStrip = cMenuJsonTree;
+
                     parentNode.Nodes.Add(node);
                 }
                 else if (token is JArray)
@@ -324,7 +338,7 @@ namespace OAuthConsole
                             parameter.Value = "";
                         }
 
-                        if (parameter.InjectInHeader)
+                        if (parameter.IsHeader)
                         {
                             request.AddHeader(parameter.Name, parameter.Value);
                             additionalHeaders.Append(parameter.Name + ": " + parameter.Value + Environment.NewLine);
@@ -333,6 +347,14 @@ namespace OAuthConsole
                         {
                             request.AddParameter(parameter.Name, parameter.Value);
                         }
+                    }
+                }
+
+                if (!string.IsNullOrWhiteSpace(txtRequestBody.Text))
+                {
+                    if (method == "POST")
+                    {                        
+                        request.AddParameter("application/json", txtRequestBody.Text, ParameterType.RequestBody);
                     }
                 }
 
@@ -479,7 +501,7 @@ namespace OAuthConsole
                         var restParameter = new RestParameter();
                         restParameter.Name = parameter.Name;
                         restParameter.Value = value;
-                        restParameter.InjectInHeader = parameter.AsHeader;
+                        restParameter.IsHeader = parameter.AsHeader;
 
                         _parameters.Add(restParameter);
                     }
@@ -491,14 +513,14 @@ namespace OAuthConsole
         {
             public RestParameter()
             {
-                InjectInHeader = false;
+                IsHeader = false;
                 Name = "";
                 Value = "";
             }
 
             public string Name { get; set; }
             public string Value { get; set; }
-            public bool InjectInHeader { get; set; }
+            public bool IsHeader { get; set; }
         }
 
         private void btnRefreshParams_Click(object sender, EventArgs e)
@@ -878,7 +900,7 @@ namespace OAuthConsole
         {
             if (e.TabPageIndex == 0)
             {
-                this.LoadJsonInTree(txtJsonString.Text);                
+                this.LoadJsonInTree(txtJsonString.Text);
             }
         }
 
