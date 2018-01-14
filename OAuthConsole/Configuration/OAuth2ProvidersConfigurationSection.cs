@@ -17,7 +17,17 @@ namespace OAuthConsole.Configuration
         /// </summary>
         public OAuth2ClientConfigurationElement()
         { }
-        
+
+        /// <summary>
+        /// Gets the name of the OAuth2 client.
+        /// </summary>
+        /// <value>The name of the OAuth2 client.</value>
+        [ConfigurationProperty("Name", IsRequired = true)]
+        public string Name
+        {
+            get { return (string)this["Name"]; }
+        }
+
         /// <summary>
         /// Gets the client identifier of the OAuth2 client.
         /// </summary>

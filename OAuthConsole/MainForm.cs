@@ -415,7 +415,7 @@ namespace OAuthConsole
                 clients.Add(element);
             }
             cbxClients.DataSource = clients;
-            cbxClients.DisplayMember = "ClientId";
+            cbxClients.DisplayMember = "Name";
 
             if (clients.Count > 0)
             {
@@ -959,6 +959,16 @@ namespace OAuthConsole
                 TextBox tbx = e.Control as TextBox;
                 tbx.Multiline = true;
             }
+        }
+
+        private void btnGetAuthHeader_Click(object sender, EventArgs e)
+        {
+            string clientId = txtClientID.Text;
+            string clientSecret = txtClientSecret.Text;
+
+            string header = Convert.ToBase64String(Encoding.UTF8.GetBytes(
+                clientId + ":" + clientSecret));
+            Clipboard.SetText(header);
         }
     }
 
