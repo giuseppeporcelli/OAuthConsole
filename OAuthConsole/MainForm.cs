@@ -30,7 +30,7 @@ namespace OAuthConsole
         [DllImport("wininet.dll", SetLastError = true)]
         private static extern bool InternetSetOption(IntPtr hInternet, int dwOption, IntPtr lpBuffer, int lpdwBufferLength);
 
-        private const string DefaultPageAddress = "http://localhost/";
+        private const string DefaultPageAddress = "http://www.amazon.com/";
 
         private BindingSource _parameters = new BindingSource();
         private OAuth2ProvidersConfigurationSection _providersConfigurationSection = null;
@@ -42,10 +42,10 @@ namespace OAuthConsole
         {
             InitializeComponent();
 
-            elementHost1.Child = new WPFWebBrowser();
-            ((WPFWebBrowser)elementHost1.Child).wbMain.Navigated += wbMain_Navigated;
-            ((WPFWebBrowser)elementHost1.Child).wbMain.Navigating += wbMain_Navigating;
-            ((WPFWebBrowser)elementHost1.Child).wbMain.LoadCompleted += wbMain_LoadCompleted;
+            //elementHost1.Child = new WPFWebBrowser();
+            //((WPFWebBrowser)elementHost1.Child).wbMain.Navigated += wbMain_Navigated;
+            //((WPFWebBrowser)elementHost1.Child).wbMain.Navigating += wbMain_Navigating;
+            //((WPFWebBrowser)elementHost1.Child).wbMain.LoadCompleted += wbMain_LoadCompleted;
 
             dgInvokeResults.AutoGenerateColumns = false;
             dgInvokeResults.DataSource = _invokeResults;
@@ -63,7 +63,7 @@ namespace OAuthConsole
 
             LoadConfiguration();
 
-            ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(DefaultPageAddress);
+            webBrowserWinForm.Navigate(DefaultPageAddress);
         }
 
         private void LoadJsonInTree(string jsonString)
@@ -73,13 +73,23 @@ namespace OAuthConsole
             var rootNode = new TreeNode("JSON");
             jsonTree.Nodes.Add(rootNode);
 
+            jsonString = jsonString.Trim();
             if (!string.IsNullOrWhiteSpace(jsonString))
             {
                 JObject myObject = null;
-
+                
                 try
                 {
-                    myObject = JObject.Parse(jsonString);
+                    if (jsonString.StartsWith("["))
+                    {
+                        JArray myArray = JArray.Parse(jsonString);
+                        myObject = new JObject();
+                        myObject.Add("", myArray);
+                    }
+                    else
+                    {   
+                        myObject = JObject.Parse(jsonString);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -356,16 +366,27 @@ namespace OAuthConsole
                             additionalHeaders.Append(parameter.Name + ": " + parameter.Value + Environment.NewLine);
                         }
 
-                        request.AddParameter(parameter.Name, parameter.Value, parameter.ParameterType);
+                        var parValue = parameter.Value.Trim();
+                        
+                        request.AddParameter(parameter.Name, parValue, parameter.ParameterType);
                     }
                 }
 
                 if (cbBrowse.Checked)
                 {
-                    tbMain.SelectedTab = tbMain.TabPages[1];
                     var uri = client.BuildUri(request);
+                    txtLog.AppendText(uri.ToString() + Environment.NewLine);
 
-                    ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(uri, "", null, additionalHeaders.ToString());
+                    if (_selectedAction.Name.Contains("Implicit"))
+                    {
+                        System.Diagnostics.Process.Start(uri.ToString());
+                    }
+                    else
+                    {
+                        tbMain.SelectedTab = tbMain.TabPages[1];
+                        webBrowserWinForm.Navigate(uri);
+                        //((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(uri, "", null, additionalHeaders.ToString());
+                    }
                 }
                 else
                 {
@@ -471,7 +492,6 @@ namespace OAuthConsole
                         break;
                     case "Resource":
                         txtInvokedEndpoint.Text = txtResourceEndpoint.Text;
-                        cbBrowse.Checked = true;
                         break;
                     default:
                         txtInvokedEndpoint.Text = "";
@@ -544,7 +564,7 @@ namespace OAuthConsole
 
                 if (Uri.IsWellFormedUriString(location, UriKind.Absolute) || location == "about:blank")
                 {
-                    ((WPFWebBrowser)elementHost1.Child).wbMain.Navigate(location);
+                    webBrowserWinForm.Navigate(location);
                 }
                 else
                 {
@@ -969,6 +989,156 @@ namespace OAuthConsole
             string header = Convert.ToBase64String(Encoding.UTF8.GetBytes(
                 clientId + ":" + clientSecret));
             Clipboard.SetText(header);
+        }
+
+        private void cMenuBtnCopyIdToken_Click(object sender, EventArgs e)
+        {
+            if (dgInvokeResults.SelectedRows != null && dgInvokeResults.SelectedRows.Count > 0)
+            {
+                var row = dgInvokeResults.SelectedRows[0];
+                var resultItem = row.DataBoundItem as InvokeResultItem;
+                string clipboardValue = "";
+
+                if (resultItem != null)
+                {
+                    if (resultItem.ExpectedContent == InvokeResultExpectedContent.TokenInBody)
+                    {
+                        try
+                        {
+                            IDictionary<string, JToken> jsonTokens = (IDictionary<string, JToken>)JsonConvert.DeserializeObject(resultItem.Content);
+
+                            if (jsonTokens != null)
+                            {
+                                if (jsonTokens.ContainsKey("id_token"))
+                                {
+                                    clipboardValue = jsonTokens["id_token"].ToString();
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    else if (resultItem.ExpectedContent == InvokeResultExpectedContent.TokenInFragment)
+                    {
+                        Uri uri = new Uri(resultItem.Content);
+
+                        if (!string.IsNullOrWhiteSpace(uri.Fragment))
+                        {
+                            string fragmentValue = uri.Fragment.Substring(1);
+                            var collection = HttpUtility.ParseQueryString(fragmentValue);
+
+                            if (collection.AllKeys.Contains("id_token"))
+                            {
+                                clipboardValue = collection["id_token"];
+                            }
+                        }
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(clipboardValue))
+                {
+                    MessageBox.Show("ID token not found in the result content.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Clipboard.SetText(clipboardValue);
+                    txtStatusLabel.Text = "ID token copied to clipboard.";
+                }
+            }
+        }
+
+        private void webBrowserWinForm_Navigated(object sender, WebBrowserNavigatedEventArgs e)
+        {
+            Cursor.Current = Cursors.Default;
+
+            txtAddressBar.Text = e.Url.ToString();
+
+            try
+            {
+                string redirectURIParameter = GetCurrentRedirectUriParameter();
+
+                if (!string.IsNullOrWhiteSpace(redirectURIParameter))
+                {
+                    Uri redirectUri = new Uri(redirectURIParameter);
+
+                    if (e.Url.Host == redirectUri.Host && e.Url.LocalPath == redirectUri.LocalPath)
+                    {
+                        tbMain.SelectedTab = tbMain.TabPages[0];
+
+                        InvokeResultItem item = new InvokeResultItem();
+                        item.Reference = ++_counter;
+                        item.StatusCode = null;
+                        item.Content = HttpUtility.UrlDecode(e.Url.ToString());
+
+                        if (string.IsNullOrWhiteSpace(e.Url.Fragment))
+                        {
+                            item.ExpectedContent = InvokeResultExpectedContent.AuthorizationCodeInQueryString;
+                        }
+                        else
+                        {
+                            item.ExpectedContent = InvokeResultExpectedContent.TokenInFragment;
+                        }
+
+                        _invokeResults.Insert(0, item);
+                        dgInvokeResults.Rows[0].Selected = true;
+                    }
+                }
+
+                pbLoading.MarqueeAnimationSpeed = 0;
+                pbLoading.Refresh();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void webBrowserWinForm_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            pbLoading.MarqueeAnimationSpeed = 30;
+
+            try
+            {
+                string redirectURIParameter = GetCurrentRedirectUriParameter();
+
+                if (!string.IsNullOrWhiteSpace(redirectURIParameter))
+                {
+                    Uri redirectUri = new Uri(redirectURIParameter);
+
+                    if (e.Url.Host == redirectUri.Host && e.Url.LocalPath == redirectUri.LocalPath && e.Url.Scheme == "x-cez")
+                    {
+                        tbMain.SelectedTab = tbMain.TabPages[0];
+
+                        InvokeResultItem item = new InvokeResultItem();
+                        item.Reference = ++_counter;
+                        item.StatusCode = null;
+                        item.Content = HttpUtility.UrlDecode(e.Url.ToString());
+
+                        if (string.IsNullOrWhiteSpace(e.Url.Fragment))
+                        {
+                            item.ExpectedContent = InvokeResultExpectedContent.AuthorizationCodeInQueryString;
+                        }
+                        else
+                        {
+                            item.ExpectedContent = InvokeResultExpectedContent.TokenInFragment;
+                        }
+
+                        _invokeResults.Insert(0, item);
+                        dgInvokeResults.Rows[0].Selected = true;
+
+                        pbLoading.MarqueeAnimationSpeed = 0;
+                        pbLoading.Refresh();
+                        e.Cancel = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 

@@ -11,3 +11,4 @@ Thumbs.db
 ~$*
 
 *.manifest
+/.vs/OAuthConsole/v15/Server/sqlite3
