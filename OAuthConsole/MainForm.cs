@@ -1140,6 +1140,60 @@ namespace OAuthConsole
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void btnCopyAccessTokenQs_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtAccessTokenQs.Text.Trim()))
+            {
+                Clipboard.SetText(txtAccessTokenQs.Text.Trim());
+            }
+        }
+
+        private void btnCopyIDTokenQS_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtIDTokenQs.Text.Trim()))
+            {
+                Clipboard.SetText(txtIDTokenQs.Text.Trim());
+            }
+        }
+
+        private void txtQueryString_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(txtQueryString.Text))
+            {
+                try
+                {
+                    Uri uri = new Uri(txtQueryString.Text);
+
+                    if (!string.IsNullOrWhiteSpace(uri.Fragment))
+                    {
+                        string fragmentValue = uri.Fragment.Substring(1);
+                        var collection = HttpUtility.ParseQueryString(fragmentValue);
+
+                        if (collection.AllKeys.Contains("id_token"))
+                        {
+                            txtIDTokenQs.Text = collection["id_token"];
+                        }
+
+                        if (collection.AllKeys.Contains("access_token"))
+                        {
+                            txtAccessTokenQs.Text = collection["access_token"];
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void btnClearQs_Click(object sender, EventArgs e)
+        {
+            txtQueryString.Text = "";
+            txtAccessTokenQs.Text = "";
+            txtIDTokenQs.Text = "";
+        }
     }
 
     public class InvokeResultItem
